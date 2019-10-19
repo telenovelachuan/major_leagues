@@ -1,0 +1,22 @@
+1. append club SPI global rankings and league Intl SPI rankings for the match dataset
+2. recent form for clubs(streaks)
+	a) games won in row before the current game
+	b) games lost in row before the current game
+	c) games won during last 5 games
+	d) games won during last 10 games
+	e) games lost during last 5 games
+	f) games lost during last 10 games
+	g) games drawn during last 5 games
+	h) games drawn during last 10 games
+3. recent scores for clubs
+	a) goals scored during last 5 matches
+	b) goals conceded during last 5 matches
+	c) goals scored during last 10 matches
+	d) goals conceded during last 10 matches
+	e) goal difference for last 5 matches
+	f) goal difference for last 10 matches
+4. generic metrics on clubs
+	a) ability to handle the easy: goal scored during last 5 games against weak teams
+	b) ability to fight the giants: goal scored during last 5 games again strong teams
+	c) ability to keep focus: goals conceded during last 5 games against weak teams
+	d) ability to stand firm: goals conceded during last 5 games against strong teams
