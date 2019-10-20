@@ -10,7 +10,7 @@ Pick the weakest 25% teams(lowest spi) from each league
 sorted = club_spi_rankings.sort_values(['league', 'spi'])
 percentile_30s = sorted.groupby('league').quantile(.3).reset_index(level=0)
 percentile_70s = sorted.groupby('league').quantile(.7).reset_index(level=0)
-
+print "percentile_30s:{}".format(percentile_30s)
 
 def get_match_result(row, for_whom):
     if row.score1 == row.score2:
@@ -114,10 +114,16 @@ for idx, row in raw_input.iterrows():
     '''
     metrics on club
     '''
-    league_p30 = float(percentile_30s[percentile_30s.league == row.league].spi)
-    league_p70 = float(percentile_70s[percentile_70s.league == row.league].spi)
-    bottom_p30_in_league = [r['name'] for _, r in sorted[(sorted.league == row.league) & (sorted.spi <= league_p30)].iterrows()]
-    top_p30_in_league = [r['name'] for _, r in sorted[(sorted.league == row.league) & (sorted.spi >= league_p70)].iterrows()]
+    if row.league not in percentile_30s:
+        bottom_p30_in_league = []
+    else:
+        league_p30 = float(percentile_30s[percentile_30s.league == row.league].spi)
+        bottom_p30_in_league = [r['name'] for _, r in sorted[(sorted.league == row.league) & (sorted.spi <= league_p30)].iterrows()]
+    if row.league not in percentile_70s:
+        top_p30_in_league = []
+    else:
+        league_p70 = float(percentile_70s[percentile_70s.league == row.league].spi)
+        top_p30_in_league = [r['name'] for _, r in sorted[(sorted.league == row.league) & (sorted.spi >= league_p70)].iterrows()]
 
     # a. goal scored during last 5 games against weak teams
     NEW_ATTR_DICT['h_gfw_5'].append(get_goal_count(past_matches, home_team, 'for', 5, bottom_p30_in_league))
