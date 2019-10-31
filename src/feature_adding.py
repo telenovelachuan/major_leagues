@@ -12,6 +12,7 @@ percentile_30s = sorted.groupby('league').quantile(.3).reset_index(level=0)
 percentile_70s = sorted.groupby('league').quantile(.7).reset_index(level=0)
 print "percentile_30s:{}".format(percentile_30s)
 
+
 def get_match_result(row, for_whom):
     if row.score1 == row.score2:
         return "D"
