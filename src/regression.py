@@ -156,7 +156,7 @@ def create_keras_model(activation='selu', optimizer='adam', neuron=50, init='lec
     # _ = Dense(units=50, activation='sigmoid')(_)
 
     # _ = Dense(units=100, activation='relu')(_)
-    score1_output = Dense(units=1, activation='linear', name='score1_output')(_)
+    score1_output = Dense(units=1, activation='linear', name='score1_output')(layer)
     # score2 output
     #_ = Dense(units=100, activation='selu', kernel_initializer='lecun_normal', input_shape=X_train.shape[1:])(input_layer)
     #_ = Dense(units=100, activation='selu', kernel_initializer='lecun_normal', )(_)
