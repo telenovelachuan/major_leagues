@@ -63,7 +63,8 @@ Uses keras Tensorflow API to build a Sequential neural network that outputs both
 	* initialization: lecun_normal (out of lecun_normal/he_normal/lecun_uniform)
 	* loss: I used MSE for regression tasks.
 	* metrics: instead of MSE, I customized a function to calculate r2 score as metrics.
-400 epoch's training could approach the r2 score of around 0.78. I plan to have a try on GCP so that the model could fit more, and dropout layers can be added to prevent overfitting.
+	
+- 400 epoch's training could approach the r2 score of around 0.78. I plan to have a try on GCP so that the model could fit more, and dropout layers can be added to prevent overfitting.
 The trained models are used to predict real football match scores. I picked out 5 games in both testing set and last weeks' live football games of European major leagues.
 	* On testing set
 	
