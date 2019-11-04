@@ -4,6 +4,7 @@ from sklearn.impute import SimpleImputer
 from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.pipeline import Pipeline
 from joblib import dump
+from keras.models import load_model, model_from_json
 
 
 #final_input = pd.read_csv("../data/processed/final.csv")
@@ -26,16 +27,49 @@ Some data cleaning
 # print "processed data:{}".format(df)
 # df.to_csv("../data/processed/training.csv")
 
-df = pd.read_csv("../data/processed/training.csv")
 
-# train/test split
-train_set, test_set = train_test_split(df, test_size=0.2, random_state=42)
-col_to_remove = ["score1", "score2"]  # for one hot encoded
-X_train = train_set.drop(columns=col_to_remove, axis=1)
-X_test = test_set.drop(columns=col_to_remove, axis=1)
-y_train1, y_train2 = train_set["score1"], train_set["score2"]
-y_test1, y_test2 = test_set["score1"], test_set["score2"]
-print "train/test split done."
+def prepare_data_for_predict_testset():
+    # preparing data for prediction
+    predict_case_indexes = [29, 1175, 3282, 6888, 7505]
+    col_to_remove = ["score1", "score2"]
+    test_set = pd.read_csv('../data/processed/test_set.csv')
+    # test_row_indexes = [test_set.iloc[idx]['Unnamed: 0'] for idx in predict_case_indexes]
+    original_df = pd.read_csv("../data/processed/processed.csv")
+    training_df = pd.read_csv("../data/processed/training.csv")
+    row_ndarray = training_df[training_df.index.isin(predict_case_indexes)]
+    rows_display = original_df[original_df.index.isin(predict_case_indexes)]
+    row_ndarray.drop(columns=col_to_remove, axis=1, inplace=True)
+    print "cases to predict:\n{}".format([row for _, row in rows_display[['date', 'team1', 'team2']].iterrows()])
+    rows_ndarray = row_ndarray.to_numpy()
+    return rows_ndarray
+
+
+def prepare_data_for_predict_set():
+    processed = pd.read_csv("../data/processed/processed.csv")
+    processed.drop(columns=['date', 'score1', 'score2'], axis=1, inplace=True)
+    columns_to_dummy = ['league', 'team1', 'team2']
+    df = pd.get_dummies(processed, columns=columns_to_dummy)
+
+    num_pipeline = Pipeline([
+        ('imputer', SimpleImputer(strategy="constant", fill_value=0)),
+        ('std_scaler', StandardScaler()),
+    ])
+    df_columns = df.columns.to_list()
+
+    df[df_columns] = num_pipeline.fit_transform(df[df_columns])
+
+    # print "processed predict set:{}".format(df)
+    # df.to_csv("../data/processed/predict_set_processed.csv")
+    #df = df.iloc[25831:].drop(columns=[['score1', 'score2']], axis=1, inplace=True)
+    predict_case_indexes = [37, 68, 584, 432, 247]
+    original_df = processed
+    rows = [df[df.index.isin([idx])] for idx in predict_case_indexes]
+    rows_display = [original_df[original_df.index.isin([idx + 25831])] for idx in predict_case_indexes]
+    print "cases to predict:\n{}".format([row[['year', 'month', 'day', 'team1', 'team2']] for row in rows_display])
+    rows_ndarray = [row.to_numpy() for row in rows]
+    print "rows_ndarray[0]:{}".format(rows_ndarray[0])
+    print "shape:{}".format(len(rows_ndarray[0]))
+    return rows_ndarray
 
 
 def train_n_evaluate(model, model_name, cv=3):
@@ -145,7 +179,7 @@ def create_keras_model(activation='selu', optimizer='adam', neuron=50, init='lec
     # score1 output
     layer = Dense(units=neuron, activation=activation, kernel_initializer=init, input_shape=X_train.shape[1:])(input_layer)
     for i in range(3):
-        layer = Dense(units=neuron, activation=activation, kernel_initializer=init, )(layer)
+        layer = Dense(units=neuron, activation=activation, kernel_initializer=init)(layer)
 
     # _ = Dense(units=200, activation='selu', kernel_initializer='lecun_normal', )(_)
     # _ = Dense(units=200, activation='selu', kernel_initializer='lecun_normal', )(_)
@@ -156,7 +190,7 @@ def create_keras_model(activation='selu', optimizer='adam', neuron=50, init='lec
     # _ = Dense(units=50, activation='sigmoid')(_)
 
     # _ = Dense(units=100, activation='relu')(_)
-    score1_output = Dense(units=1, activation='linear', name='score1_output')(layer)
+    score1_output = Dense(units=1, activation='relu', name='score1_output')(layer)
     # score2 output
     #_ = Dense(units=100, activation='selu', kernel_initializer='lecun_normal', input_shape=X_train.shape[1:])(input_layer)
     #_ = Dense(units=100, activation='selu', kernel_initializer='lecun_normal', )(_)
@@ -175,24 +209,59 @@ def create_keras_model(activation='selu', optimizer='adam', neuron=50, init='lec
     # print nn_model.summary()
 
 
-model = KerasRegressor(build_fn=create_keras_model, epochs=30)
-activations = ['relu', 'sigmoid', 'linear']
-# learn_rate = [0.001, 0.01, 0.1, 0.2, 0.3]
-neurons = [50, 100, 200]
-inits = ["lecun_normal", "he_normal", "lecun_uniform"]
-optimizers = ["sgd", "adam", "nadam"]
-param_grid = dict(activation=activations, optimizer=optimizers, neuron=neurons, init=inits)
-grid = GridSearchCV(estimator=model, param_grid=param_grid, n_jobs=-1)
-grid_result = grid.fit(X_train, y_train1)
-print "Best: {} if using {}".format(grid_result.best_score_, grid_result.best_params_)
+'''
+Run Grid Search to find best hyperparameters for score1
+'''
+# model = KerasRegressor(build_fn=create_keras_model, epochs=30)
+# activations = ['relu', 'sigmoid', 'linear']
+# # learn_rate = [0.001, 0.01, 0.1, 0.2, 0.3]
+# neurons = [50, 100, 200]
+# inits = ["lecun_normal", "he_normal", "lecun_uniform"]
+# optimizers = ["sgd", "adam", "nadam"]
+# param_grid = dict(activation=activations, optimizer=optimizers, neuron=neurons, init=inits)
+# grid = GridSearchCV(estimator=model, param_grid=param_grid, n_jobs=-1)
+# grid_result = grid.fit(X_train, y_train1)
+# print "Best: {} if using {}".format(grid_result.best_score_, grid_result.best_params_)
 
-#
-# print "begin to fit model..."
-# nn_model.fit(X_train, {"score1_output": y_train1, "score2_output": y_train2}, epochs=30, verbose=1)
-# save_keras_model(nn_model, "NN")
-# y_test = test_set[['score1', 'score2']].values
-# scores = nn_model.evaluate(X_test, {"score1_output": y_test1, "score2_output": y_test2}, verbose=1)
-# print "scores: {}".format(scores)
+
+def fit_model(score):
+    print "begin to fit model for {}}...".format(score)
+    # train/test split
+    df = pd.read_csv("../data/processed/training.csv")
+    train_set, test_set = train_test_split(df, test_size=0.2, random_state=42)
+    col_to_remove = ["score1", "score2"]
+    X_train = train_set.drop(columns=col_to_remove, axis=1)
+    X_test = test_set.drop(columns=col_to_remove, axis=1)
+    y_train1, y_train2 = train_set["score1"], train_set["score2"]
+    y_test1, y_test2 = test_set["score1"], test_set["score2"]
+    print "train/test split done."
+
+    nn_model = create_keras_model(activation='relu', optimizer='adam', neuron=100, init='lecun_normal')
+    print "Keras model constructed"
+    nn_model.fit(X_train, y_train1 if score == 'score1' else y_train2, epochs=50, verbose=1)
+    save_keras_model(nn_model, "NN_{}".format(score))
+    scores = nn_model.evaluate(X_test, y_test1 if score == 'score1' else y_test2, verbose=1)
+    print "scores: {}".format(scores)
+
+
+def load_model_n_predict(score, row_value_array):
+    print "load model and predict {}...".format(score)
+    with open('../models/NN_{}.json'.format(score)) as f:
+        model = model_from_json(f.read())
+    model.load_weights('../models/NN_{}.h5'.format(score))
+    print "loading finished"
+    prediction = model.predict(row_value_array)
+    print "prediction for {} :{}".format(score, prediction)
+
+
+# rows = prepare_data_for_prediction()
+# load_model_n_predict('score1', rows)
+# load_model_n_predict('score2', rows)
+
+rows = prepare_data_for_predict_set()
+load_model_n_predict('score1', rows[4])
+load_model_n_predict('score2', rows[4])
+
 
 
 
