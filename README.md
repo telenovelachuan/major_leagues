@@ -72,15 +72,17 @@ The trained models are used to predict real football match scores. I picked out 
 	| 2016-08-20 | Burnley | Liverpool | 1.94 | -0.04 | 2 | 0 |
 	| 2002-04-17 | Barcelona | Athletic Bilbao | 2.86 | -0.03 | 3 | 0 |
 	| 2017-08-19 | Swansea City | Manchester United | 0.02 | 3.6 | 0 | 4 |
-	| 2017-12-23 | Genoa | Benevento | 1.04 | -0.02 | 1 | 0 |
+	| 2017-12-23 | Genoa | Benevento | 1.04 | -0.02 | 1 | 0s |
 	| 2018-01-31 | Tottenham Hotspur | Manchester United | 1.86 | -0.03 | 2 | 0 |
 	
-	(2) On live football games last week(weekend of 2019-10-19)
+	(2) On live football games last week(weekends of 2019-10-19 and 2019-10-26)
 	
 	| Date | Team1 | Team2 | score1 by model | score2 by model | score1 in real | score2 in real |
 	| --- | --- | --- | --- | --- | --- | --- |
+	| 2019-10-26 | Bayern Munich | FC Union Berlin | 2.98 | 0.99 | 2 | 1 |
 	| 2019-10-18 | Eintracht Frankfurt | Bayer Leverkusen | 0.77 | 1.75 | 3 | 0 |
 	| 2019-10-19 | Everton | West Ham United | 1.03 | 0.98 | 2 | 0 |
 	| 2019-10-27 | Liverpool | Tottenham Hotspur | 3.57 | 0.9 | 2 | 1 |
-	| 2019-10-26 | Bayern Munich | FC Union Berlin | 2.98 | 0.99 | 2 | 1 |
 	| 2019-10-20 | Parma | Genoa | 3.16 | 0.99 | 5 | 1 |
+	
+The model works quite well on testing set! And also not so bad on the real football games last week.
