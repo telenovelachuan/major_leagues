@@ -3,7 +3,7 @@ from sklearn.preprocessing import StandardScaler, OneHotEncoder
 from sklearn.impute import SimpleImputer
 from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.pipeline import Pipeline
-from joblib import dump
+from joblib import dump, load
 from keras.models import load_model, model_from_json
 
 

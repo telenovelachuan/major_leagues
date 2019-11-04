@@ -38,7 +38,7 @@ def get_last_n_count(df, team, result_type, n=None):
             return row.score1 < row.score2 if isHome else row.score1 > row.score2
 
     past_n_matches = get_past_matches(df, team, n)
-    return sum([1 for _, m in past_n_matches.iterrows() if ((m.team1 == team and _get_score_condition(m, True)) or (m.team2 == home_team and _get_score_condition(m, False)))])
+    return sum([1 for _, m in past_n_matches.iterrows() if ((m.team1 == team and _get_score_condition(m, True)) or (m.team2 == team and _get_score_condition(m, False)))])
 
 
 def get_streaks(df, team, result_type):
