@@ -6,7 +6,6 @@ Manchester City, Tottenham Hotspur, Arsenal, Manchester United, Liverpool, Chels
 which are exactly the "top giant 6" in Premier League today. Anyway I love watching Premier League every week...)
 
 
-
 1. append club SPI global rankings and league Intl SPI rankings into the match dataset for every match as new features
 2. explore recent form for clubs(streaks):
         a) games won in row before the current game
