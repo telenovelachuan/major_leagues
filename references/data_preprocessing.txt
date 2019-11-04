@@ -1,0 +1,9 @@
+# Data preprocessing
+
+1. use Python to implement the logic of finding past N match results and goal scorings, and winning/losing streaks for teams.
+2. use Excel pivotable to append club SPI global rankings and league Intl SPI rankings into spi matches dataset.
+3. drop rows with empty scores for training data
+4. one-hot encode column "league", "team1" and "team2"
+5. for other columns, use SimpleImputer to fill in mean value
+6. use StandardScaler for standardization
+7. use train_test_split to split final dataset into training and testing data
