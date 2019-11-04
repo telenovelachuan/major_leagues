@@ -66,6 +66,7 @@ Uses keras Tensorflow API to build a Sequential neural network that outputs both
 400 epoch's training could approach the r2 score of around 0.78. I plan to have a try on GCP so that the model could fit more, and dropout layers can be added to prevent overfitting.
 The trained models are used to predict real football match scores. I picked out 5 games in both testing set and last weeks' live football games of European major leagues.
 	(1) On testing set.
+	
 	| Date | Team1 | Team2 | score1 by model | score2 by model | score1 in real | score2 in real |
 	| --- | --- | --- | --- | --- | --- | --- |
 	| 2016-08-20 | Burnley | Liverpool | 1.94 | -0.04 | 2 | 0 |
