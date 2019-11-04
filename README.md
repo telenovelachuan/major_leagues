@@ -55,17 +55,17 @@ Both forests converged in an acceptable time and fitted the data much better tha
 Uses keras Tensorflow API to build a Sequential neural network that outputs both the score values for regression.
 - model architecture: I build an NN with one input layer, 3 dense layers(units as hyperparameter) and one output layer(more layers slowed down training on my macbook...)
 - hyperparameters: I uses GridSearchCV by sklearn to grid search the best hyperparameters for keras model(used KerasRegressor for model wrapper). The best hyperparameters are:
-	(1) activation: relu (out of relu/sigmoid/linear)
+	* activation: relu (out of relu/sigmoid/linear)
 	For hidden layers, grid search chooses relu. For output layer, I choose relu because scores are never negative, and relu does not limit any score loof, such as sigmoid does.
-	(2) optimizer: adam (out of sgd/adam/nadam)
-	(3) units: 100 (out of 50/100/200)
+	* optimizer: adam (out of sgd/adam/nadam)
+	* units: 100 (out of 50/100/200)
 	more units per layer increases learning ability, but slows down converging.
-	(4) initialization: lecun_normal (out of lecun_normal/he_normal/lecun_uniform)
-	(5) loss: I used MSE for regression tasks.
-	(6) metrics: instead of MSE, I customized a function to calculate r2 score as metrics.
+	* initialization: lecun_normal (out of lecun_normal/he_normal/lecun_uniform)
+	* loss: I used MSE for regression tasks.
+	* metrics: instead of MSE, I customized a function to calculate r2 score as metrics.
 400 epoch's training could approach the r2 score of around 0.78. I plan to have a try on GCP so that the model could fit more, and dropout layers can be added to prevent overfitting.
 The trained models are used to predict real football match scores. I picked out 5 games in both testing set and last weeks' live football games of European major leagues.
-	(1) On testing set.
+	* On testing set
 	
 	| Date | Team1 | Team2 | score1 by model | score2 by model | score1 in real | score2 in real |
 	| --- | --- | --- | --- | --- | --- | --- |
@@ -75,7 +75,7 @@ The trained models are used to predict real football match scores. I picked out 
 	| 2017-12-23 | Genoa | Benevento | 1.04 | -0.02 | 1 | 0s |
 	| 2018-01-31 | Tottenham Hotspur | Manchester United | 1.86 | -0.03 | 2 | 0 |
 	
-	(2) On live football games last week(weekends of 2019-10-19 and 2019-10-26)
+	* On live football games last week(weekends of 2019-10-19 and 2019-10-26)
 	
 	| Date | Team1 | Team2 | score1 by model | score2 by model | score1 in real | score2 in real |
 	| --- | --- | --- | --- | --- | --- | --- |
