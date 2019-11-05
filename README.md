@@ -36,7 +36,7 @@ A data science project on the soccer_spi dataset to explore the features of Euro
 7. use train_test_split to split final dataset into training and testing data
 
 # Build regression models
-Tried 4 regression models on the training dataset, with k-fold cross validation(cv set to 3 here).
+Tried 4 regression models on the training dataset, with k-fold cross validation(cv set to 5).
 models used:
 
 1. Linear Regression
@@ -55,10 +55,10 @@ Both forests converged in an acceptable time and fitted the data much better tha
 Uses keras Tensorflow API to build a Sequential neural network that outputs both the score values for regression.
 - model architecture: I build an NN with one input layer, 3 dense layers(units as hyperparameter) and one output layer(more layers slowed down training on my macbook...)
 - hyperparameters: I uses GridSearchCV by sklearn to grid search the best hyperparameters for keras model(used KerasRegressor for model wrapper). The best hyperparameters are:
-	* activation: relu (out of relu/sigmoid/linear)
+	* activation: relu (out of relu/sigmoid/linear). 
 	For hidden layers, grid search chooses relu. For output layer, I choose relu because scores are never negative, and relu does not limit any score loof, such as sigmoid does.
 	* optimizer: adam (out of sgd/adam/nadam)
-	* units: 100 (out of 50/100/200)
+	* units: 100 (out of 50/100/200). 
 	more units per layer increases learning ability, but slows down converging.
 	* initialization: lecun_normal (out of lecun_normal/he_normal/lecun_uniform)
 	* loss: I used MSE for regression tasks.
