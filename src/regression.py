@@ -5,6 +5,7 @@ from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.pipeline import Pipeline
 from joblib import dump, load
 from keras.models import load_model, model_from_json
+import matplotlib.pyplot as plt
 
 
 #final_input = pd.read_csv("../data/processed/final.csv")
